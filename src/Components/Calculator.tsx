@@ -10,7 +10,7 @@ export default function Calculator(){
             <div className="container">
                 <Button type="action" value="AC" />
                 <Button type="operator" value="%" />
-                <Button type="action" value="<===" />
+                <Button type="action" value="<==" />
                 <Button type="operator" value="/" />
                 <Button type="number" value="7" />
                 <Button type="number" value="8" />
