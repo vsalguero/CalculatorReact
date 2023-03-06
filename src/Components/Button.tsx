@@ -6,13 +6,13 @@ export default function Button({type, value}: {type: string; value: string}){
     const handleClick = () => {
         switch(type){
             case "number":
-                calculator.addNumber(parseInt(value));
+                calculator.addNumber(Number(value));
                 break;
             case "operator":
                 calculator.addOperation(value)
                 break;
             case "action":
-                calculator.executeAction();
+                calculator.executeAction(value);
                 break;
             default:
                 break;

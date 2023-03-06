@@ -9,21 +9,64 @@ const AppContext = createContext({
   addNumber: (value: number) => {},
   addOperation: (operation: string) => {},
   getResult: () => {},
-  executeAction: () => {}
+  executeAction: (action: string) => {},
 });
 
-export default function CalculatorState({children}: any) {
+export default function CalculatorState({ children }: any) {
   const [memory, setMemory] = useState<any>(null);
   const [operation, setOperation] = useState<any>(null);
   const [currentValue, setCurrentValue] = useState<number>(0);
   const [isReset, setIsReset] = useState<boolean>(true);
 
-  function handleAddNumber (value: number) {};
+  const handleAddNumber = (value: number) => {
+    if (isReset) {
+      setCurrentValue(value);
+      setIsReset(false);
+    } else {
+      const newValue: string = currentValue.toString() + value;
+      setCurrentValue(Number(newValue));
+    }
+  };
 
-  function handleAddOperation (operation: string) {};
+  const handleAddOperation = (op: string) => {
+    if(currentValue){
+        if(operation){
+            //TODO: Resolver
+          handleGetResult()
+        }else{
+            setOperation(op);
+            setMemory(currentValue);
+            setCurrentValue(0);
+            setIsReset(true);
+        }
+    }
+  };
 
-  function handleGetResult() {};
-  function handleExecuteAction() {};
+  const handleGetResult = () => {
+    let result = 0;
+    if(currentValue && operation && memory){
+        switch (operation) {
+            case "+" :
+                result = currentValue + parseFloat(memory);
+                break;
+            
+            default:
+        }
+
+        setCurrentValue(result);
+        setOperation(null);
+        setMemory(result);
+        setIsReset(true);
+    }
+  };
+  const handleExecuteAction = (action: string) => {
+    switch(action) {
+        case "=" :
+            handleGetResult();
+            break;
+        default:
+    }
+  };
   return (
     <AppContext.Provider
       value={{
