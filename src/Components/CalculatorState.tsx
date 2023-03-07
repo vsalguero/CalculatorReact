@@ -107,8 +107,8 @@ export default function CalculatorState({ children }: any) {
         const min = Math.floor(currentValue);
         setCurrentValue(min);
       } else {
-        const newNumber = currentValue.toFixed(numberOfDecimals - 1).toString();
-        setCurrentValue(parseFloat(newNumber));
+        const newNumber = currentValue.toString().substring(0, currentValue.toString().length-1);
+        setCurrentValue(parseFloat(newNumber.toString()));
       }
     } else {
       setCurrentValue(Math.floor(currentValue / 10));
