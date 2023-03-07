@@ -25,27 +25,21 @@ export default function CalculatorState({ children }: any) {
       if (value.toString() === ".") {
         setIsDecimal(true);
       } else {
-        const point = isDecimal ? "." : "";
-        const newValue = currentValue.toString() + point + value.toString();
-        
-        setCurrentValue(Number(newValue));
+        const dot = isDecimal ? "." : "";
+        const old: string = currentValue.toString() + dot + value.toString();
+        setCurrentValue(parseFloat(old));
         setIsReset(false);
         setIsDecimal(false);
       }
-      setCurrentValue(Number(value));
-      setIsReset(false);
     } else {
-        if (value.toString() === ".") {
-            setIsDecimal(true);
-          } else {
-            const point = isDecimal ? "." : "";
-            const newValue = currentValue.toString() + point + value.toString();
-            setCurrentValue(Number(newValue));
-            setIsReset(false);
-            setIsDecimal(false);
-          } 
-      const newValue: string = currentValue.toString() + value;
-      setCurrentValue(parseFloat(newValue));
+      if (value.toString() === ".") {
+        setIsDecimal(true);
+      } else {
+        const dot = isDecimal ? "." : "";
+        const old: string = currentValue.toString() + dot + value.toString();
+        setIsDecimal(false);
+        setCurrentValue(parseFloat(old));
+      }
     }
   };
 
@@ -54,11 +48,14 @@ export default function CalculatorState({ children }: any) {
       if (operation) {
         handleGetResult();
         setOperation(op);
+        setIsReset(true);
+        setIsDecimal(false);
       } else {
         setOperation(op);
         setMemory(currentValue);
         setCurrentValue(0);
         setIsReset(true);
+        setIsDecimal(false);
       }
     }
   };
@@ -68,19 +65,20 @@ export default function CalculatorState({ children }: any) {
     if (currentValue && operation && memory) {
       switch (operation) {
         case "+":
-          result = currentValue + parseFloat(memory);
+          result = parseFloat(currentValue.toString()) + parseFloat(memory);
           break;
         case "-":
-          result = parseFloat(memory) - currentValue;
+          result = parseFloat(memory) - parseFloat(currentValue.toString());
           break;
         case "*":
-          result = parseFloat(memory) * currentValue;
+          result = parseFloat(memory) * parseFloat(currentValue.toString());
           break;
         case "/":
-          result = parseFloat(memory) / currentValue;
+          result = parseFloat(memory) / parseFloat(currentValue.toString());
           break;
         case "%":
-          result = (parseFloat(memory) / 100) * currentValue;
+          result =
+            (parseFloat(memory) / 100) * parseFloat(currentValue.toString());
           break;
 
         default:
@@ -90,6 +88,7 @@ export default function CalculatorState({ children }: any) {
       setOperation(null);
       setMemory(result);
       setIsReset(true);
+      setIsDecimal(false);
     }
   };
 
@@ -97,15 +96,26 @@ export default function CalculatorState({ children }: any) {
     setCurrentValue(0);
     setOperation(null);
     setIsReset(true);
+    setIsDecimal(false);
   };
 
   const deleteNumber = () => {
-    setCurrentValue(Math.floor(currentValue / 10));
-    setOperation(null);
-    setIsReset(true);
+    const index = currentValue.toString().indexOf(".");
+    if (index > 0) {
+      const numberOfDecimals = currentValue.toString().slice(index + 1).length;
+      if (numberOfDecimals == 1) {
+        const min = Math.floor(currentValue);
+        setCurrentValue(min);
+      } else {
+        const newNumber = currentValue.toFixed(numberOfDecimals - 1).toString();
+        setCurrentValue(parseFloat(newNumber));
+      }
+    } else {
+      setCurrentValue(Math.floor(currentValue / 10));
+    }
   };
 
-  const convertToFloat = () => {
+  const addDecimal = () => {
     if (currentValue.toString().indexOf(".") > 0) {
     } else {
       handleAddNumber(".");
@@ -127,7 +137,7 @@ export default function CalculatorState({ children }: any) {
         setCurrentValue(currentValue * -1);
         break;
       case ".":
-        convertToFloat();
+        addDecimal();
         break;
       default:
     }
