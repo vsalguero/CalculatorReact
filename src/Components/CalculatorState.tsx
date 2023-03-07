@@ -130,7 +130,7 @@ export default function CalculatorState({ children }: any) {
       case "AC":
         clean();
         break;
-      case "<==":
+      case "←":
         deleteNumber();
         break;
       case "+/-":

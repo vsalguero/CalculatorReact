@@ -1,6 +1,9 @@
 .calculatorContainer{
     width: 500px;
     margin: 100px auto;
+    background-color: #444;
+    padding: 50px 15px;
+    border-radius: 10px;
 }
 .container{
     display: grid;
@@ -29,8 +32,14 @@
     display: flex;
     flex-direction: column;
     text-align: right;
+    background-color: #1BD3A1;
+    padding: 20px;
+    font-family: "Consolas";
+    border: 1px solid white;
+    
 }
 .calculatorCurrentValue{
     font-size: 48px;
     font-weight: bold;
+    color: white;
 }
